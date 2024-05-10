@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { InicioComponent } from './modules/inicio/inicio.component';
+import { InicioComponent } from './modules/inicio/pages/inicio/inicio.component';
 
 const routes: Routes = [
   // ruta común -> componente
@@ -13,6 +13,9 @@ const routes: Routes = [
   // .then: funcion asincronica del tipo promesa
   {
     path: "",loadChildren:()=>import('./modules/inicio/inicio.module').then(m=>m.InicioModule)
+  },
+  {
+    path: "",loadChildren:()=>import('./modules/producto/producto.module').then(m=>m.ProductoModule)
   },
 ];
 

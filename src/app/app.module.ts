@@ -3,12 +3,11 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTabsModule} from '@angular/material/tabs';
-import { MatCardModule } from '@angular/material/card';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
+
+//importamos solo componentes globales para que permita exportar los componentes
+import { SharedModule } from './modules/shared/shared.module';
 
 
 @NgModule({
@@ -18,9 +17,8 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    MatToolbarModule, MatButtonModule, MatIconModule,
-    MatTabsModule,
-    MatCardModule
+    BrowserAnimationsModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
