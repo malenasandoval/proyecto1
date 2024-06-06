@@ -3,9 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { InicioRoutingModule } from './inicio-routing.module';
 
-import { CardComponent } from './components/card/card.component';
+// VISTA - PÁGINA - INTERFAZ DEL USUARIO
 import { InicioComponent } from './pages/inicio/inicio.component';
 
+// COMPONENTES LOCALES
+import { CardComponent } from './components/card/card.component';
+
+// COMPONENTES QUE IMPORTAMOS DE A MATERIAL
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 

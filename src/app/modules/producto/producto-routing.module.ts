@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ProductoModule } from './producto.module';
+
+// IMPORTACIONES DE LAS VISTAS DEL MODULO PRODUCTO
 import { AlimentacionComponent } from './pages/alimentacion/alimentacion.component';
 import { ProductoComponent } from './pages/producto/producto.component';
 import { IndumentariaComponent } from './pages/indumentaria/indumentaria.component';

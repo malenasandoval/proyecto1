@@ -11,7 +11,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 
-//IMPORTADAS TODAS LAS RUTAS
+//IMPORTADAS TODAS LAS RUTAS // RUTAS GENERALES DE TODOS LOS MODULOS
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
 
@@ -34,7 +34,8 @@ import { AppRoutingModule } from 'src/app/app-routing.module';
     FooterComponent,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatMenuModule
   ]
 })
 export class SharedModule { }
