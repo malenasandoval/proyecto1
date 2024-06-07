@@ -9,10 +9,12 @@ import { Usuario } from 'src/app/models/usuario';
 export class InicioSesionComponent {
   // Este "hide" es para el input de contraseña
   hide = true;
-
+  // ####################################### LOCAL
+  // Definimos la propiedad local para que guarde la colección
   // arreglo publico donde traigo la interfaz Usuario
   public usuarioLocal : Usuario[]
 
+  // Coleccion local de usuarios con informacion
   // Utilizamos el constructor para inicializar usuarioLocal con una lista predefinida de usuarios
   constructor() {
     this.usuarioLocal = [{
@@ -22,10 +24,22 @@ export class InicioSesionComponent {
       email: 'malenasando@gmail.com',
       rol: 'visitante',
       password: 'malena05',
-    }]
+    }, 
+    {
+      uid: '',
+      nombre: 'Pepe',
+      apellido: 'Novita',
+      email: 'pepenovita@gmail.com',
+      rol: 'vis',
+      password: 'abc123'
+    },]
   }
+  
+  // ####################################### FIN LOCAL
 
-  // Objeto para almacenar los datos del usuario que intenta iniciar sesion
+  // ####################################### INGRESADO
+
+  // Importamos la interfaz de usuario e inicializamos vacío -> Objeto para almacenar los datos del usuario que intenta iniciar sesion
   usuarios: Usuario = {
 
     uid: '', // -> comillas vacias porque es string
@@ -42,7 +56,7 @@ export class InicioSesionComponent {
   //Creamos la funcion para registrar (o validar) un incio de sesion
   IniciarSesion (){
 
-    //constante credenciales va a guardar la informacion que ingrese el usuario
+    //constante credenciales va a guardar la informacion que ingrese el usuario, que se envia desde la web
     const credenciales = {
       uid: this.usuarios.uid,
       nombre: this.usuarios.nombre,
@@ -51,10 +65,12 @@ export class InicioSesionComponent {
       rol: this.usuarios.rol,
       password: this.usuarios.password,
     }
-
+   
+    // Repetitiva para recorrer la colección local
     //Crear un ciclo que recorra los ingresos de los usuarios
     for (let i = 0; i < this.usuarioLocal.length; i++) {
-      //Creamos una constante que vamos a utilizar para verificar la informacion
+
+      // Constante que guarde la información de la posición actual de los objetos y que vamos a utilizar para verificar la informacion
       const orden = this.usuarioLocal[i];
 
       //Se comparan los datos ingresados con los guardados
