@@ -1,3 +1,4 @@
+//PRUEBA UNITARIA PARA EL COMPONENTE FOOTER
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FooterComponent } from './footer.component';
