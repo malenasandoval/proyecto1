@@ -64,7 +64,7 @@ export class InicioSesionComponent {
     apellido: '',
     email: '',
     rol: '',
-    password: ''
+    password: '',
   }
 
   // Función para el inicio de sesión
@@ -109,8 +109,35 @@ export class InicioSesionComponent {
       email: this.usuarioIngresado.email,
       password: this.usuarioIngresado.password
     }
+    
+    // obtenemos el usuario desde la BD -> cloud firestore
+    try{
+      const usuarioBD = await this.servicioAuth.obtenerUsuario(credenciales.email);
 
-    const res = await this.servicioAuth.iniciarSesion(credenciales.email, credenciales.password)
+      // ! -> si es diferente
+      // .empty -> metodo de firebase para marcar si es algo vacio 
+      if(!usuarioBD || usuarioBD.empty) {
+        alert ('el correo electronico no esta registrado')
+        this.limpiarInputs();
+        return;
+      }
+
+      // primer documento (registro) en la coleccion de usuarios que se obtiene desde la consulta
+      const usuarioDoc = usuarioBD.docs[0];
+
+      // extraer los datos del documento en forma de un objeto y se especifica como de tipo "Usuario" -> haciendo referencia a nuestra interfaz de usuario
+      const usuarioData = usuarioDoc.data() as Usuario;
+
+      //Hash de la contraseña ingresada por el usuario
+      const hashedPassword = CryptoJS.SHA256(credenciales.password).toString();
+
+      if(hashedPassword !== usuarioData.password){
+        alert ('Contraseña incorrecta');
+        this.usuarioIngresado.password = '';
+        return;
+      }
+
+      const res = await this.servicioAuth.iniciarSesion(credenciales.email, credenciales.password)
       .then(res => {
         alert('¡Se ha logueado con éxito! :D');
 
@@ -121,6 +148,10 @@ export class InicioSesionComponent {
 
         this.limpiarInputs();
       })
+
+    }catch(error){
+      this.limpiarInputs
+    }    
   }
 
   // Función para vaciar el formulario
