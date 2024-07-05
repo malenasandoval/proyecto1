@@ -14,8 +14,6 @@ import {MatMenuModule} from '@angular/material/menu';
 //IMPORTADAS TODAS LAS RUTAS // RUTAS GENERALES DE TODOS LOS MODULOS
 import { AppRoutingModule } from 'src/app/app-routing.module';
 
-
-
 @NgModule({
   declarations: [
     NavbarComponent,

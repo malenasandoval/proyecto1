@@ -1,5 +1,15 @@
 import { Component } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario';
+// Servicio de Autentificación
+import { AuthService } from '../../services/auth.service';
+// Servicio de Firestore
+import { FirestoreService } from 'src/app/modules/shared/services/firestore.service';
+// Servicio de rutas que otorga Angular
+import { Router } from '@angular/router';
+
+
+// importamos paqueteria de criptacion
+import * as CryptoJS from 'crypto-js';
 
 @Component({
   selector: 'app-registro',
@@ -21,12 +31,24 @@ export class RegistroComponent {
   }
 
   // CREAR UNA COLECCIÓN QUE SOLO RECIBE OBJETOS DEL TIPO USUARIOS
+  // coleccionUsuarios es una colección de objetos Usuario que almacena todos los usuarios registrados.
   coleccionUsuarios: Usuario[] = [];
 
-  // FUNCIÓN PARA EL REGISTRO
-  registrar(){
-    
+  // Referenciamos a nuestros servicios
+  // Inicializa los servicios de autenticación (AuthService), base de datos (FirestoreService) y navegación (Router).
+  constructor(
+    public servicioAuth: AuthService, // métodos de autentificación
+    public servicioFirestore: FirestoreService, // vincula UID con la colección
+    public servicioRutas: Router // método de navegación
+  ){}
+
+  // FUNCIÓN ASINCRONICA PARA EL REGISTRO
+  async registrar(){
+
     // CREDENCIALES = información que ingrese el usuario
+
+    //################################ LOCAL
+    /*
     const credenciales = {
       uid: this.usuarios.uid,
       nombre: this.usuarios.nombre,
@@ -34,20 +56,67 @@ export class RegistroComponent {
       email: this.usuarios.email,
       rol: this.usuarios.rol,
       password: this.usuarios.password
-    }
-
+    }*/
     // enviamos los nuevos registros por medio del método push a la colección
-    this.coleccionUsuarios.push(credenciales);
+    // this.coleccionUsuarios.push(credenciales);
 
-    // por consola
-    console.log(credenciales);
-    console.log(this.coleccionUsuarios)
+    // Notificamos al usuario el correcto registro
+    // alert("Te registraste con éxito :)");
+
+    // ############################### FIN LOCAL
+
+    const credenciales = {
+      email: this.usuarios.email,
+      password: this.usuarios.password
+    }
+    // constante "res" = resguarda una respuesta
+    // registrar en AuthService crea un nuevo usuario en Firebase Authentication con el correo electrónico y la contraseña proporcionado
+    const res = await this.servicioAuth.registrar(credenciales.email, credenciales.password)
+
+    // El método THEN nos devuelve la respuesta esperada por la promesa
+    .then(res => {
+      alert('Ha agregado un usuario con éxito :)');
+      // Accedemos al servicio de rutas -> método navigate
+      // método NAVIGATE = permite dirigirnos a diferentes vistas
+      // navigate en Router redirige al usuario a la página de inicio después del registro
+      this.servicioRutas.navigate(['/inicio']);
+    })
+    // El método CATCH toma una falla y la vuelve un ERROR
+    .catch(error => {
+      alert('Hubo un problema al registrar un nuevo usuario :(');
+    })
+
+    const uid = await this.servicioAuth.obtenerUid();
+
+    this.usuarios.uid = uid;
+
+    //SHA256 lenguaje hexadecimal: algoritmo de hashing seguro que toma una entrada (en este caso la contraseña) y produce una cadena de caracteres hexadecimal que representa su Hash
+    //toString(): convierte el resultado del hash en una cadena de caracteres legible    
+    this.usuarios.password = CryptoJS.SHA256(this.usuarios.password).toString()
+    
+    // this.guardarUsuario() guardaba la informacion del usuario en la coleccion
+    this.guardarUsuario();
+
+    // Llamamos a la función limpiarInputs() para que se ejecute
+    this.limpiarInputs();
   }
 
-  //FUNCION LIMPIAR INPUTS
-  limpiarInputs () {
+  // función para agregar un nuevo usuario
+  // guardarUsuario guarda la información del nuevo usuario en la colección de usuarios de Firestore.
+  async guardarUsuario(){
+    this.servicioFirestore.agregarUsuario(this.usuarios, this.usuarios.uid)
+    .then(res => {
+      console.log(this.usuarios);
+    })
+    .catch(err => {
+      console.log('Error =>', err);
+    })
+  }
+
+  // Función para vaciar el formulario
+  limpiarInputs(){
     const inputs = {
-      uid: this.usuarios.uid = '', //en caso de ser number seria 0, este caso es string
+      uid: this.usuarios.uid = '',
       nombre: this.usuarios.nombre = '',
       apellido: this.usuarios.apellido = '',
       email: this.usuarios.email = '',
